@@ -1,6 +1,17 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import * as dat from 'lil-gui'
+import gsap from 'gsap'
+
+//Debug 
+const gui = new dat.GUI({width: 400})
+
+const parametrs = {
+    spin: () => {
+        gsap.to(mesh.rotation, {duration: 1,  y: mesh.rotation.y + 10})
+    }
+}
 
 /**
  * Base
@@ -28,10 +39,36 @@ const scene = new THREE.Scene()
 
 // Object
 const geometry = new THREE.BoxGeometry(1, 1, 1,2,2,2)
-const material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true })
+const material = new THREE.MeshBasicMaterial({ color: 0xffff00})
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
+//Debug
+gui.add(mesh.position, 'x', -2, 2, 0.01)
+// gui.add(mesh.position, 'y', -2, 2, 0.01)
+gui.add(mesh.position, 'y')
+.min(-3)
+.max(3)
+.step(0.01)
+.name('elevation')
+
+gui.add(mesh.position, 'z', -1, 1, 0.01)
+
+gui.add(mesh, 'visible')
+
+gui.add(material, 'wireframe')
+
+// Create color pickers for multiple color formats
+// const colorFormats = {
+// 	string: '#ffffff',
+// 	int: 0xffffff,
+// 	object: { r: 1, g: 1, b: 1 },
+// 	array: [ 1, 1, 1 ]
+// };
+
+gui.addColor( material, 'color' )
+
+gui.add(parametrs, 'spin')
 
 // Sizes
 const sizes = {
